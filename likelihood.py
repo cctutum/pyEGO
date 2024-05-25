@@ -21,16 +21,19 @@ def likelihood(t, X, y):
     """
     
     theta = 10.0**t
-    p = 2
     n, k = X.shape
     one = np.ones(n)
 
-    # Build correlation matrix
-    dist = cdist(X, X, metric='minkowski', p=p)
-    Psi = np.exp(-np.sum(theta * np.abs(dist), axis=2))
+    # Build correlation matrix (Psi)
+    Psi = np.zeros((n, n))
+    # It is a symmetric matrix, so we only need the upper matrix
+    for i in range(n):
+        for j in (range(i+1, n)):
+            Psi[i,j] = np.exp(-np.sum(theta * np.abs(X[i,:]-X[j,:])**2))
 
-    # Add diagonal and small number to reduce ill-conditioning
-    Psi = Psi + np.eye(n) + np.eye(n) * np.finfo(float).eps
+    # Add upper and lower halves, diagonal of ones and small number to reduce 
+    # ill-conditioning
+    Psi = Psi + Psi.T + np.eye(n) * (1 + np.finfo(float).eps)
 
     # Cholesky factorisation
     try:
@@ -55,12 +58,14 @@ def likelihood(t, X, y):
 d = 2
 n = 3*d
 X = lhs(d, n)
-y = random.randint(0, 9)
+y = np.random.uniform(0, 9, n).T
 print(X)
+print(y)
 plt.plot(X[:,0], X[:,1], 'bo')
 
 t = np.random.uniform(-3, 2, d)
 print(t)
-likelihood(t, X, y)
+NegLnLike, Psi, U = likelihood(t, X, y)
+print(NegLnLike, "\n", Psi, "\n", U)
 
 

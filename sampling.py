@@ -3,7 +3,7 @@ import numpy as np
 import time
 
 
-def lhs(d, n, centered=True, method='lloyd', seed=None):
+def lhs(d, n, centered=True, method='random-cd', seed=None):
     # Latin Hypercube Sampling (LHS)
     #
     # d: int 
@@ -29,8 +29,8 @@ def lhs(d, n, centered=True, method='lloyd', seed=None):
     rng = np.random.default_rng(seed)
     
     sampler = qmc.LatinHypercube(d, 
-                                 scramble=not centered,
-                                 optimization=method,
+                                 scramble= not centered,
+                                 optimization= method,
                                  seed=rng)
     
     sample = sampler.random(n)
