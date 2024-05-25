@@ -1,5 +1,8 @@
 import numpy as np
 from scipy.spatial.distance import cdist
+from sampling import lhs
+import matplotlib.pyplot as plt
+import random
 
 
 def likelihood(t, X, y):
@@ -48,3 +51,16 @@ def likelihood(t, X, y):
     NegLnLike = -(-(n / 2) * np.log(SigmaSqr) - 0.5 * LnDetPsi)
 
     return NegLnLike, Psi, U
+
+d = 2
+n = 3*d
+X = lhs(d, n)
+y = random.randint(0, 9)
+print(X)
+plt.plot(X[:,0], X[:,1], 'bo')
+
+t = np.random.uniform(-3, 2, d)
+print(t)
+likelihood(t, X, y)
+
+
