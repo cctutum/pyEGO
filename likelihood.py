@@ -19,7 +19,6 @@ def likelihood(t, X, y):
         Psi - correlation matrix
         U - Choleski factorisation of correlation matrix
     """
-    
     theta = 10.0**t
     n, k = X.shape
     one = np.ones(n)
@@ -55,17 +54,10 @@ def likelihood(t, X, y):
 
     return NegLnLike, Psi, U
 
-d = 2
-n = 3*d
-X = lhs(d, n)
-y = np.random.uniform(0, 9, n).T
-print(X)
-print(y)
-plt.plot(X[:,0], X[:,1], 'bo')
 
-t = np.random.uniform(-3, 2, d)
-print(t)
-NegLnLike, Psi, U = likelihood(t, X, y)
-print(NegLnLike, "\n", Psi, "\n", U)
+def likelihood_wrapper(t, X, y):
+    outputs = likelihood(t, X, y)
+    return outputs[0]
+
 
 
