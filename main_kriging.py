@@ -27,14 +27,17 @@ theta_min = -3.0
 
 # Train Kriging (search for minimum likelihood)
 bnds = tuple((theta_min, theta_max) for i in range(k))
-# Implement a multi-start strategy
+
+#%% Implement a multi-start strategy
+
+n_runs = 50 # Choose n_runs=1 for a single-start strategy
 theta_list, NegLnLike_list = [], []
 for i in range(50):
     theta0 = np.random.uniform(theta_min, theta_max, k) # random initial guess
     print(theta0)
     theta = minimize(likelihood_wrapper, theta0, args=(X, y), 
-                     bounds=bnds, method='SLSQP', tol=1e-6,
-                     options={'disp': True})
+                      bounds=bnds, method='SLSQP', tol=1e-6,
+                      options={'disp': True})
     NegLnLike, _, _ = likelihood(theta.x, X, y)
     theta_list.append(theta.x)
     NegLnLike_list.append(NegLnLike)
@@ -46,4 +49,11 @@ theta_opt = zipped[min_index][0]
 
 print(f"optimal theta-vector for Kriging model={theta_opt}")
 print(f"NegLnLike= {NegLnLike}")
+
+#%%
+
+
+
+
+
 
